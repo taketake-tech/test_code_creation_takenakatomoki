@@ -1,6 +1,9 @@
 package jp.co.sss.lms.ct.f01_login1;
 
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.Duration;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,6 +12,10 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * 結合テスト ログイン機能①
@@ -35,14 +42,30 @@ public class Case02 {
 	@Order(1)
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
-		// TODO ここに追加
+		goTo("http://localhost:8080/lms/");
+
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		WebElement loginIdInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("loginId")));
+		WebElement passwordInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("password")));
+
+		assertTrue(loginIdInput.isDisplayed(), "ログインIDの入力欄が表示されていません");
+		assertTrue(passwordInput.isDisplayed(), "パスワードの入力欄が表示されていません");
 	}
 
 	@Test
 	@Order(2)
 	@DisplayName("テスト02 DBに登録されていないユーザーでログイン")
 	void test02() {
-		// TODO ここに追加
+		webDriver.findElement(By.id("loginId")).sendKeys("loginid");
+		webDriver.findElement(By.id("password")).sendKeys("password");
+
+		webDriver.findElement(By.className("btn-primary")).click();
+
+		WebElement errorMessage = webDriver.findElement(By.className("error"));
+		assertTrue(errorMessage.isDisplayed(), "エラーメッセージが表示されていません");
+
+		getEvidence(new Object() {
+		});
 	}
 
 }
