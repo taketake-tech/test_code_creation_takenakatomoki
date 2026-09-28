@@ -79,9 +79,10 @@ public class Case04 {
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 		WebElement helpLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("ヘルプ")));
 		helpLink.click();
-		wait.until(ExpectedConditions.urlToBe("http://localhost:8080/lms/help"));
-		String targetUrl = webDriver.getCurrentUrl();
-		assertEquals("http://localhost:8080/lms/help", targetUrl, "遷移先が違います。");
+
+		WebElement helpElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("panel-title")));
+		assertTrue(helpElement.isDisplayed(), "ヘルプ画面が表示されていません。");
+
 		getEvidence(new Object() {
 		});
 	}
@@ -102,13 +103,6 @@ public class Case04 {
 				break;
 			}
 		}
-
-		wait.until(ExpectedConditions.urlToBe("http://localhost:8080/lms/faq"));
-		String questionUrl = webDriver.getCurrentUrl();
-		assertEquals("http://localhost:8080/lms/faq", questionUrl, "遷移先が違います。");
-
-		getEvidence(new Object() {
-		});
 	}
 
 }

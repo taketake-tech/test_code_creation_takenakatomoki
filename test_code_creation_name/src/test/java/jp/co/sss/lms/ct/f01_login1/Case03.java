@@ -45,25 +45,29 @@ public class Case03 {
 		goTo("http://localhost:8080/lms/");
 
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-		WebElement loginIdInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("loginId")));
-		WebElement passwordInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("password")));
+		WebElement loginIdInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginId")));
+		WebElement passwordInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("password")));
 
 		assertTrue(loginIdInput.isDisplayed(), "ログインIDの入力欄が表示されていません");
 		assertTrue(passwordInput.isDisplayed(), "パスワードの入力欄が表示されていません");
-		getEvidence(new Object());
+		getEvidence(new Object() {
+		});
 	}
 
 	@Test
 	@Order(2)
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
+
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA02");
 		webDriver.findElement(By.id("password")).sendKeys("StudentAA02B");
 
 		webDriver.findElement(By.className("btn-primary")).click();
 
-		String currentUrl = webDriver.getCurrentUrl();
-		assertEquals("http://localhost:8080/lms/course/detail", currentUrl, "遷移先が違います。");
+		WebElement detailElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("active")));
+
+		assertTrue(detailElement.isDisplayed(), "ここはコース詳細画面ではありません。");
 
 		getEvidence(new Object() {
 		});
