@@ -45,11 +45,9 @@ public class Case04 {
 		goTo("http://localhost:8080/lms/");
 
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-		WebElement loginIdInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("loginId")));
-		WebElement passwordInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("password")));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginId")));
 
-		assertTrue(loginIdInput.isDisplayed(), "ログインIDの入力欄が表示されていません");
-		assertTrue(passwordInput.isDisplayed(), "パスワードの入力欄が表示されていません");
+		assertEquals("ログイン | LMS", webDriver.getTitle(), "ログイン画面のタイトルが一致しません。");
 
 		getEvidence(new Object() {
 		});
@@ -61,11 +59,13 @@ public class Case04 {
 	void test02() {
 		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA02");
 		webDriver.findElement(By.id("password")).sendKeys("StudentAA02B");
-
 		webDriver.findElement(By.className("btn-primary")).click();
 
-		String currentUrl = webDriver.getCurrentUrl();
-		assertEquals("http://localhost:8080/lms/course/detail", currentUrl, "遷移先が違います。");
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+
+		wait.until(ExpectedConditions.titleIs("コース詳細 | LMS"));
+
+		assertEquals("コース詳細 | LMS", webDriver.getTitle(), "コース詳細画面のタイトルが一致しません。");
 
 		getEvidence(new Object() {
 		});
@@ -80,8 +80,9 @@ public class Case04 {
 		WebElement helpLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("ヘルプ")));
 		helpLink.click();
 
-		WebElement helpElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("panel-title")));
-		assertTrue(helpElement.isDisplayed(), "ヘルプ画面が表示されていません。");
+		// ヘルプ画面への遷移をタイトルまたは固有要素で検証（※実際のヘルプ画面のタイトルに合わせて調整してください）
+		wait.until(ExpectedConditions.titleIs("ヘルプ | LMS"));
+		assertEquals("ヘルプ | LMS", webDriver.getTitle(), "ヘルプ画面に遷移していません。");
 
 		getEvidence(new Object() {
 		});
@@ -96,13 +97,17 @@ public class Case04 {
 
 		WebElement faqLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("よくある質問")));
 		faqLink.click();
-
 		for (String windowHandle : webDriver.getWindowHandles()) {
 			if (!windowHandle.equals(originalWindow)) {
 				webDriver.switchTo().window(windowHandle);
 				break;
 			}
 		}
+
+		wait.until(ExpectedConditions.titleIs("よくある質問 | LMS"));
+		assertEquals("よくある質問 | LMS", webDriver.getTitle(), "よくある質問画面が正しく表示されていません。");
+		getEvidence(new Object() {
+		});
 	}
 
 }

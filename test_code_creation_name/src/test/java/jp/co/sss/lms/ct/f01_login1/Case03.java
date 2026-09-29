@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -45,11 +44,10 @@ public class Case03 {
 		goTo("http://localhost:8080/lms/");
 
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-		WebElement loginIdInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginId")));
-		WebElement passwordInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("password")));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginId")));
 
-		assertTrue(loginIdInput.isDisplayed(), "ログインIDの入力欄が表示されていません");
-		assertTrue(passwordInput.isDisplayed(), "パスワードの入力欄が表示されていません");
+		assertEquals("ログイン | LMS", webDriver.getTitle(), "ログイン画面のタイトルが一致しません。");
+
 		getEvidence(new Object() {
 		});
 	}
@@ -58,20 +56,18 @@ public class Case03 {
 	@Order(2)
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
-
-		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA02");
 		webDriver.findElement(By.id("password")).sendKeys("StudentAA02B");
-
 		webDriver.findElement(By.className("btn-primary")).click();
 
-		WebElement detailElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("active")));
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
-		assertTrue(detailElement.isDisplayed(), "ここはコース詳細画面ではありません。");
+		wait.until(ExpectedConditions.titleIs("コース詳細 | LMS"));
+
+		assertEquals("コース詳細 | LMS", webDriver.getTitle(), "コース詳細画面のタイトルが一致しません。");
 
 		getEvidence(new Object() {
 		});
-
 	}
 
 }
