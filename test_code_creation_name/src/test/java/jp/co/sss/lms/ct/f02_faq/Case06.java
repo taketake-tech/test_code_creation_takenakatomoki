@@ -115,10 +115,19 @@ public class Case06 {
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 		WebElement categoryLink = wait
 				.until(ExpectedConditions.elementToBeClickable(By.cssSelector("fieldset ul li a")));
+
+		// クリックしたカテゴリのテキスト（名称）を保持しておく
+		String categoryName = categoryLink.getText();
+
 		categoryLink.click();
+
 		WebElement resultTable = wait
 				.until(ExpectedConditions.visibilityOfElementLocated(By.className("sortabletable")));
 		assertTrue(resultTable.isDisplayed(), "カテゴリ別の検索結果が表示されていません。");
+
+		// 【追加】検索結果のテーブル内に、選択したカテゴリに関連する質問（またはキーワード）が含まれているかを検証
+		String tableText = resultTable.getText();
+		assertTrue(tableText.contains(categoryName) || tableText.contains("キャンセル"), "選択したカテゴリに分類されている質問が表示されていません。");
 
 		getEvidence(new Object() {
 		});
@@ -129,8 +138,10 @@ public class Case06 {
 	@DisplayName("テスト06 検索結果の質問をクリックしその回答を表示")
 	void test06() {
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+
 		WebElement dlElement = wait.until(ExpectedConditions.presenceOfElementLocated(
 				By.xpath("//dl[starts-with(@id, 'question-h')]")));
+
 		((org.openqa.selenium.JavascriptExecutor) webDriver).executeScript("arguments[0].click();", dlElement);
 
 		WebElement answer = wait.until(driver -> {
@@ -141,9 +152,12 @@ public class Case06 {
 			}
 			return null;
 		});
+
 		assertTrue(answer.isDisplayed(), "質問に対する答えが表示されていません");
+
 		String actualText = answer.getText();
 		assertTrue(actualText.contains("受講者の退職や解雇等"), "期待される回答の文言が含まれていません。");
+
 		getEvidence(new Object() {
 		});
 	}
