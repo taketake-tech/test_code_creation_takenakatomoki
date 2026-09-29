@@ -114,12 +114,16 @@ public class Case05 {
 	void test05() {
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 		WebElement searchInput = wait.until(ExpectedConditions.elementToBeClickable(By.id("form")));
-		searchInput.sendKeys("テスト");
+		searchInput.sendKeys("キャンセル");
 		WebElement searchButton = webDriver.findElement(By.cssSelector("input[value='検索']"));
 		searchButton.click();
-		WebElement resultElement = wait
+
+		WebElement resultTable = wait
 				.until(ExpectedConditions.visibilityOfElementLocated(By.className("table-hover")));
-		assertTrue(resultElement.isDisplayed(), "検索結果が表示されていません。");
+		assertTrue(resultTable.isDisplayed(), "検索結果が表示されていません。");
+
+		String tableText = resultTable.getText();
+		assertTrue(tableText.contains("キャンセル"), "検索結果にキーワード「キャンセル」が含まれていません。");
 
 		getEvidence(new Object() {
 		});

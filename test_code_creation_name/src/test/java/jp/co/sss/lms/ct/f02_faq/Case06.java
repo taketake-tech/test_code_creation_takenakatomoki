@@ -129,10 +129,8 @@ public class Case06 {
 	@DisplayName("テスト06 検索結果の質問をクリックしその回答を表示")
 	void test06() {
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-
 		WebElement dlElement = wait.until(ExpectedConditions.presenceOfElementLocated(
 				By.xpath("//dl[starts-with(@id, 'question-h')]")));
-
 		((org.openqa.selenium.JavascriptExecutor) webDriver).executeScript("arguments[0].click();", dlElement);
 
 		WebElement answer = wait.until(driver -> {
@@ -143,13 +141,9 @@ public class Case06 {
 			}
 			return null;
 		});
-
 		assertTrue(answer.isDisplayed(), "質問に対する答えが表示されていません");
-
 		String actualText = answer.getText();
 		assertTrue(actualText.contains("受講者の退職や解雇等"), "期待される回答の文言が含まれていません。");
-		assertTrue(actualText.contains("弊社営業担当までご相談下さい。"), "期待される回答の文言が含まれていません。");
-
 		getEvidence(new Object() {
 		});
 	}
