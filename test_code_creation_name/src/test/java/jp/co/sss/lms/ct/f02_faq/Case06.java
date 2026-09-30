@@ -123,10 +123,10 @@ public class Case06 {
 		WebElement questionItem = wait.until(ExpectedConditions.visibilityOfElementLocated(
 				By.xpath("//dl[starts-with(@id, 'question-h')]")));
 
-		assertTrue(questionItem.isDisplayed(), "カテゴリに紐づく質問項目が画面に表示されていません。");
-
 		((org.openqa.selenium.JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);",
 				questionItem);
+
+		assertTrue(questionItem.isDisplayed(), "カテゴリに紐づく質問項目が画面に表示されていません。");
 
 		String questionText = questionItem.getText();
 		assertTrue(questionText.contains("キャンセル料・途中退校について"),

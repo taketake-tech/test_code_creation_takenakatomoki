@@ -80,7 +80,6 @@ public class Case04 {
 		WebElement helpLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("ヘルプ")));
 		helpLink.click();
 
-		// ヘルプ画面への遷移をタイトルまたは固有要素で検証（※実際のヘルプ画面のタイトルに合わせて調整してください）
 		wait.until(ExpectedConditions.titleIs("ヘルプ | LMS"));
 		assertEquals("ヘルプ | LMS", webDriver.getTitle(), "ヘルプ画面に遷移していません。");
 
