@@ -125,6 +125,9 @@ public class Case06 {
 
 		assertTrue(questionItem.isDisplayed(), "カテゴリに紐づく質問項目が画面に表示されていません。");
 
+		((org.openqa.selenium.JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);",
+				questionItem);
+
 		String questionText = questionItem.getText();
 		assertTrue(questionText.contains("キャンセル料・途中退校について"),
 				"選択したカテゴリの検索結果に、期待される具体的な質問文が含まれていません。");
@@ -155,9 +158,12 @@ public class Case06 {
 
 		assertTrue(answer.isDisplayed(), "質問に対する答えが表示されていません");
 
+		((org.openqa.selenium.JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);",
+				answer);
+
 		String actualText = answer.getText();
 		assertTrue(actualText.contains("受講者の退職や解雇等"),
-				"回答がありません");
+				"回答エリアに期待される具体的な文言が含まれていません。");
 
 		getEvidence(new Object() {
 		});
