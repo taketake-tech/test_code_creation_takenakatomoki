@@ -113,21 +113,21 @@ public class Case06 {
 	@DisplayName("テスト05 カテゴリ検索で該当カテゴリの検索結果だけ表示")
 	void test05() {
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-		WebElement categoryLink = wait
-				.until(ExpectedConditions.elementToBeClickable(By.cssSelector("fieldset ul li a")));
 
-		// クリックしたカテゴリのテキスト（名称）を保持しておく
-		String categoryName = categoryLink.getText();
+		assertEquals("よくある質問 | LMS", webDriver.getTitle(), "よくある質問画面ではありません。");
 
+		WebElement categoryLink = wait.until(ExpectedConditions.elementToBeClickable(
+				By.xpath("//a[contains(text(), '【研修関係】')]")));
 		categoryLink.click();
 
-		WebElement resultTable = wait
-				.until(ExpectedConditions.visibilityOfElementLocated(By.className("sortabletable")));
-		assertTrue(resultTable.isDisplayed(), "カテゴリ別の検索結果が表示されていません。");
+		WebElement questionItem = wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("//dl[starts-with(@id, 'question-h')]")));
 
-		// 【追加】検索結果のテーブル内に、選択したカテゴリに関連する質問（またはキーワード）が含まれているかを検証
-		String tableText = resultTable.getText();
-		assertTrue(tableText.contains(categoryName) || tableText.contains("キャンセル"), "選択したカテゴリに分類されている質問が表示されていません。");
+		assertTrue(questionItem.isDisplayed(), "カテゴリに紐づく質問項目が画面に表示されていません。");
+
+		String questionText = questionItem.getText();
+		assertTrue(questionText.contains("キャンセル料・途中退校について"),
+				"選択したカテゴリの検索結果に、期待される具体的な質問文が含まれていません。");
 
 		getEvidence(new Object() {
 		});
@@ -156,7 +156,8 @@ public class Case06 {
 		assertTrue(answer.isDisplayed(), "質問に対する答えが表示されていません");
 
 		String actualText = answer.getText();
-		assertTrue(actualText.contains("受講者の退職や解雇等"), "期待される回答の文言が含まれていません。");
+		assertTrue(actualText.contains("受講者の退職や解雇等"),
+				"回答がありません");
 
 		getEvidence(new Object() {
 		});
